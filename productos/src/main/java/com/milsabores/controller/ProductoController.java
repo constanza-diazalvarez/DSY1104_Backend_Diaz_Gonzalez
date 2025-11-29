@@ -1,0 +1,61 @@
+package com.milsabores.controller;
+
+import com.milsabores.ProductoSpec.ProductoSpec;
+import com.milsabores.model.Producto;
+import com.milsabores.service.ProductoService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+import org.springframework.data.domain.*;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/productos")
+@CrossOrigin(origins = "*")
+@Tag(name = "Productos", description = "Gestión de catálogo de productos")
+public class ProductoController {
+
+    private final ProductoService service;
+
+    public ProductoController(ProductoService service) {
+        this.service = service;
+    }
+
+    @Operation(summary = "Listar productos con filtros y paginación")
+    @GetMapping
+    public Page<Producto> listar(
+            @RequestParam(required = false) String categoria,
+            @RequestParam(required = false) String forma,
+            @RequestParam(required = false) String sabor,
+            @RequestParam(required = false) String etiqueta,
+            @RequestParam(required = false) String tamano,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "8") int size
+    ) {
+
+        categoria = normalizar(categoria);
+        forma = normalizar(forma);
+        sabor = normalizar(sabor);
+        etiqueta = normalizar(etiqueta);
+        tamano = normalizar(tamano);
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        Specification<Producto> spec =
+                Specification.where(ProductoSpec.categoria(categoria))
+                        .and(ProductoSpec.forma(forma))
+                        .and(ProductoSpec.sabor(sabor))
+                        .and(ProductoSpec.etiqueta(etiqueta))
+                        .and(ProductoSpec.tamano(tamano));
+
+        return service.buscar(spec, pageable);
+    }
+
+    private String normalizar(String valor) {
+        return (valor == null || valor.equalsIgnoreCase("undefined") || valor.isBlank())
+                ? null
+                : valor;
+    }
+
+}
