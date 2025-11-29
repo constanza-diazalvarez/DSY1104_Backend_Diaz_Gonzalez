@@ -1,5 +1,6 @@
 package com.milsabores.controller;
 
+import com.milsabores.dto.ActualizarUsuarioDTO;
 import com.milsabores.dto.LoginRequestDTO;
 import com.milsabores.dto.LoginResponseDTO;
 import com.milsabores.dto.RegistroUsuarioDTO;
@@ -35,4 +36,19 @@ public class UsuariosController {
 
         return ResponseEntity.ok(usuarioService.buildProfile(usuario));
     }
+
+    @PatchMapping("/actualizar/{email}")
+    public ResponseEntity<?> actualizarPerfil(
+            @PathVariable String email,
+            @RequestBody ActualizarUsuarioDTO dto) {
+
+        Usuario u = usuarioService.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        Usuario actualizado = usuarioService.patchUpdate(u.getId(), dto);
+        var perfil = usuarioService.buildProfile(actualizado);
+
+        return ResponseEntity.ok(perfil);
+    }
+
 }
