@@ -2,20 +2,18 @@ package com.milsabores;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.context.annotation.ComponentScan;
 
-@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
-@RestController
+/**
+ * Aplicación principal del microservicio de Ventas/Órdenes
+ * Puerto: 8083
+ * Swagger UI: http://localhost:8083/swagger-ui/index.html
+ */
+@SpringBootApplication
+@ComponentScan(basePackages = {"com.milsabores", "com.milsabores.ventas"})
 public class VentasApp {
 
     public static void main(String[] args) {
         SpringApplication.run(VentasApp.class, args);
-    }
-
-    @GetMapping("/ventas")
-    public String probar() {
-        return "ventas 8083";
     }
 }
