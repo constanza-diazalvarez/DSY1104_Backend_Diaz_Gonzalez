@@ -53,6 +53,17 @@ public class GlobalExceptionHandler {
     }
 
     /**
+     * Maneja excepciones de Transbank
+     */
+    @ExceptionHandler(TransbankException.class)
+    public ResponseEntity<ApiResponseDTO<Void>> handleTransbankException(TransbankException ex) {
+        log.error("Error de Transbank: {}", ex.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.BAD_GATEWAY)
+                .body(ApiResponseDTO.error("Error en el servicio de pago: " + ex.getMessage()));
+    }
+
+    /**
      * Maneja excepciones de validación de argumentos
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
