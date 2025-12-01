@@ -53,7 +53,10 @@ public class ProductoController {
     }
 
     private String normalizar(String valor) {
-        return (valor == null || valor.equalsIgnoreCase("undefined") || valor.isBlank())
+        return (valor == null
+                || valor.equalsIgnoreCase("undefined")
+                || valor.equalsIgnoreCase("null")
+                || valor.isBlank())
                 ? null
                 : valor;
     }
