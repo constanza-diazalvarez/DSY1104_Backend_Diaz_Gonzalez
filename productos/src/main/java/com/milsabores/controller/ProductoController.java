@@ -3,7 +3,12 @@ package com.milsabores.controller;
 import com.milsabores.ProductoSpec.ProductoSpec;
 import com.milsabores.model.Producto;
 import com.milsabores.service.ProductoService;
+
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import org.springframework.data.domain.*;
@@ -13,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/productos")
 @CrossOrigin(origins = "*")
-@Tag(name = "Productos", description = "Gestión de catálogo de productos")
+@Tag(name = "Productos", description = "Gestión del catálogo de productos con filtros y paginación")
 public class ProductoController {
 
     private final ProductoService service;
@@ -22,7 +27,29 @@ public class ProductoController {
         this.service = service;
     }
 
-    @Operation(summary = "Listar productos con filtros y paginación")
+    @Operation(
+            summary = "Listar productos",
+            description = "Permite filtrar productos por categoría, forma, sabor, etiqueta y tamaño. También admite paginación.",
+            parameters = {
+                    @Parameter(name = "categoria", description = "Categoría del producto. Ej: 'TC', 'TT'"),
+                    @Parameter(name = "forma", description = "Forma del producto. Ej: 'circular', 'cuadrada'"),
+                    @Parameter(name = "sabor", description = "Sabor del producto. Ej: 'chocolate', 'vainilla'"),
+                    @Parameter(name = "etiqueta", description = "Etiqueta especial. Ej: 'sin-azucar', 'vegano'"),
+                    @Parameter(name = "tamano", description = "Tamaño del producto. Ej: '8 porciones', '12 porciones'"),
+                    @Parameter(name = "page", description = "Número de página (por defecto 0)"),
+                    @Parameter(name = "size", description = "Tamaño de la página (por defecto 8)")
+            },
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Listado de productos encontrado",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = Page.class))
+                    ),
+                    @ApiResponse(responseCode = "400", description = "Parámetros de consulta inválidos"),
+                    @ApiResponse(responseCode = "404", description = "No se encontraron productos")
+            }
+    )
     @GetMapping
     public Page<Producto> listar(
             @RequestParam(required = false) String categoria,
@@ -53,9 +80,12 @@ public class ProductoController {
     }
 
     private String normalizar(String valor) {
-        return (valor == null || valor.equalsIgnoreCase("undefined") || valor.isBlank())
+        return (valor == null
+                || valor.equalsIgnoreCase("undefined")
+                || valor.equalsIgnoreCase("null")
+                || valor.isBlank())
                 ? null
                 : valor;
     }
-
 }
+
