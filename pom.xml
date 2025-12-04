@@ -9,6 +9,8 @@
 
     <modules>
         <module>ventas</module>
+        <module>productos</module>
+        <module>usuarios</module>
     </modules>
 
     <properties>
