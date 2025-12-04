@@ -8,9 +8,9 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>usuarios</module>
-        <module>productos</module>
         <module>ventas</module>
+        <module>productos</module>
+        <module>usuarios</module>
     </modules>
 
     <properties>
