@@ -24,7 +24,8 @@ public class CorsConfig implements WebMvcConfigurer {
                         "http://localhost:5173",  // Vite dev server
                         "http://localhost:3000",  // React dev server alternativo
                         "http://127.0.0.1:5173",
-                        "http://127.0.0.1:3000"
+                        "http://127.0.0.1:3000",
+                        "https://mil-sabores-puce.vercel.app"  // Vercel production
                 )
                 .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
@@ -39,7 +40,8 @@ public class CorsConfig implements WebMvcConfigurer {
                 "http://localhost:5173",
                 "http://localhost:3000",
                 "http://127.0.0.1:5173",
-                "http://127.0.0.1:3000"
+                "http://127.0.0.1:3000",
+                "https://mil-sabores-puce.vercel.app"  // Vercel production
         ));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
