@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @Slf4j
 @Tag(name = "WebPay", description = "API para pagos con Transbank WebPay Plus")
-@CrossOrigin(origins = {"http://localhost:5173", "http://localhost:3000"})
+@CrossOrigin(origins = {"http://localhost:5173", "http://localhost:3000", "https://mil-sabores-puce.vercel.app"})
 public class WebPayController {
 
     private final TransbankService transbankService;
