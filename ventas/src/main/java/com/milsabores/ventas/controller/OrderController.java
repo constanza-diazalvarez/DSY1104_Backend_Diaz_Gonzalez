@@ -30,7 +30,7 @@ import java.util.List;
 @RequestMapping("/api/orders")
 @RequiredArgsConstructor
 @Tag(name = "Órdenes", description = "API para la gestión de órdenes de compra")
-@CrossOrigin(origins = {"http://localhost:5173", "http://localhost:3000", "https://mil-sabores-puce.vercel.app"})
+@CrossOrigin(origins = "*")
 public class OrderController {
 
     private final OrderService orderService;
