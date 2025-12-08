@@ -1,6 +1,6 @@
 package com.milsabores.controller;
 
-import com.milsabores.ProductoSpec.ProductoSpec;
+import com.milsabores.spec.ProductoSpec;
 import com.milsabores.model.Producto;
 import com.milsabores.service.ProductoService;
 
