@@ -47,7 +47,7 @@ public class UsuarioService {
 
         LocalDate fecha = null;
         try {
-            fecha = LocalDate.parse(req.getFechaNacimiento()); // yyyy-MM-dd esperado
+            fecha = LocalDate.parse(req.getFechaNacimiento());
         } catch (DateTimeParseException ex) {
             throw new IllegalArgumentException("Formato de fecha inválido (yyyy-MM-dd)");
         }
@@ -56,7 +56,7 @@ public class UsuarioService {
                 .nombre(req.getNombre())
                 .apellidos(req.getApellidos())
                 .email(req.getEmail())
-                .fechaNacimiento(fecha)                      // <-- LocalDate aquí
+                .fechaNacimiento(fecha)
                 .password(passwordEncoder.encode(req.getPassword()))
                 .codigoPromo(req.getCodigoPromo())
                 .build();
@@ -127,6 +127,8 @@ public class UsuarioService {
                 nacimiento, edad, flag50, flag10, flagCumple);
     }
 
+    /*clase inmutable que transporta datos
+    *es basicamente un DTO*/
     public static record PerfilUsuario(Long id, String nombre, String apellidos,
                                        String email, LocalDate fechaNacimiento, int edad,
                                        boolean flag50, boolean flag10, boolean flagCumple) {}
