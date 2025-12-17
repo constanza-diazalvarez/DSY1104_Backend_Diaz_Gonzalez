@@ -40,7 +40,6 @@ public class SecurityConfig {
 
                         // Preflight CORS requests
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers("/api/orders/**").permitAll()
                         .requestMatchers("/api/payments/webpay/**").permitAll()
 
                         // WebPay callbacks desde Transbank (no envían JWT)
@@ -49,10 +48,11 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/payments/webpay/abort").permitAll()
 
                         // Endpoints protegidos - requieren JWT válido
-                        .requestMatchers("/api/orders/**").authenticated()
                         .requestMatchers("/api/payments/**").authenticated()
+                        .requestMatchers("/api/orders/**").authenticated()
 
                         .anyRequest().authenticated())
+
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
@@ -63,6 +63,7 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
 
         config.setAllowedOrigins(List.of(
+                "http://localhost:5173",
                 "https://mil-sabores-puce.vercel.app",
                 "https://*.trycloudflare.com"
         ));
@@ -71,7 +72,11 @@ public class SecurityConfig {
                 "GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"
         ));
 
-        config.setAllowedHeaders(List.of("*"));
+        config.setAllowedHeaders(List.of(
+                "Authorization",
+                "Content-Type",
+                "Accept"
+        ));
         config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
