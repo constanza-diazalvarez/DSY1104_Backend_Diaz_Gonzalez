@@ -20,6 +20,7 @@ public class JwtService {
     private long expirationMs;
 
     private Key getSignKey() {
+        System.out.println("[USUARIOS] JWT Secret length: " + secret.length() + ", hash: " + secret.hashCode());
         return Keys.hmacShaKeyFor(secret.getBytes());
     }
 
@@ -46,4 +47,3 @@ public class JwtService {
         return sub != null && sub.equals(username);
     }
 }
-
