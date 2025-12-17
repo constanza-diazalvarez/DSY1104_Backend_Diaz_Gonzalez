@@ -10,11 +10,14 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 /**
  * Controlador REST para pagos con Transbank WebPay
@@ -186,4 +189,30 @@ public class WebPayController {
 
         return ResponseEntity.ok(ApiResponseDTO.success("Pago cancelado por el usuario"));
     }
+
+    @PostMapping("/return")
+    public void webpayReturn(
+            @RequestParam(value = "token_ws", required = false) String tokenWs,
+            @RequestParam(value = "TBK_TOKEN", required = false) String tbkToken,
+            HttpServletResponse response
+    ) throws IOException {
+
+        String token = tokenWs != null ? tokenWs : tbkToken;
+
+        if (token == null) {
+            response.sendRedirect("https://mil-sabores-puce.vercel.app/pago-error");
+            return;
+        }
+
+        log.info("Retorno Webpay - token {}", token);
+
+        PaymentResultDTO result = transbankService.commitTransaction(token);
+
+        if (result.isSuccess()) {
+            response.sendRedirect("https://mil-sabores-puce.vercel.app/pago-exitoso");
+        } else {
+            response.sendRedirect("https://mil-sabores-puce.vercel.app/pago-rechazado");
+        }
+    }
+
 }
