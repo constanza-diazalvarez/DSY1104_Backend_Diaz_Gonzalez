@@ -63,7 +63,8 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
 
         config.setAllowedOrigins(List.of(
-                "https://mil-sabores-puce.vercel.app"
+                "https://mil-sabores-puce.vercel.app",
+                "https://*.trycloudflare.com"
         ));
 
         config.setAllowedMethods(List.of(
